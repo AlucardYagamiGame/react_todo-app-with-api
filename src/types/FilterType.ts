@@ -1,4 +1,4 @@
-export const enum FilterType {
+export enum FilterType {
   all = 'all',
   active = 'active',
   completed = 'completed',

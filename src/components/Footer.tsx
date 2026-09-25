@@ -17,21 +17,20 @@ type FilterLink = {
   dataCy: string;
 };
 
-const FILTER_LINKS: FilterLink[] = [
-  { value: FilterType.all, href: '#/', label: 'All', dataCy: 'FilterLinkAll' },
-  {
-    value: FilterType.active,
-    href: '#/active',
-    label: 'Active',
-    dataCy: 'FilterLinkActive',
-  },
-  {
-    value: FilterType.completed,
-    href: '#/completed',
-    label: 'Completed',
-    dataCy: 'FilterLinkCompleted',
-  },
-];
+function getFilterHref(value: FilterType): string {
+  return value === FilterType.all ? '#/' : `#/${value}`;
+}
+
+function getFilterLabel(value: FilterType): string {
+  return value[0].toUpperCase() + value.slice(1);
+}
+
+const FILTER_LINKS: FilterLink[] = Object.values(FilterType).map(value => ({
+  value,
+  href: getFilterHref(value),
+  label: getFilterLabel(value),
+  dataCy: `FilterLink${getFilterLabel(value)}`,
+}));
 
 export const Footer: React.FC<Props> = ({
   todos,
