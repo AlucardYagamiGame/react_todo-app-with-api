@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
-import { FilterType } from '../types/FilterType';
+import { FILTERS } from '../types/FilterType';
+import type { FilterType } from '../types/FilterType';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -18,14 +19,14 @@ type FilterLink = {
 };
 
 function getFilterHref(value: FilterType): string {
-  return value === FilterType.all ? '#/' : `#/${value}`;
+  return value === FILTERS.all ? '#/' : `#/${value}`;
 }
 
 function getFilterLabel(value: FilterType): string {
   return value[0].toUpperCase() + value.slice(1);
 }
 
-const FILTER_LINKS: FilterLink[] = Object.values(FilterType).map(value => ({
+const FILTER_LINKS: FilterLink[] = Object.values(FILTERS).map(value => ({
   value,
   href: getFilterHref(value),
   label: getFilterLabel(value),

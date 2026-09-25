@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { ErrorMessage } from '../types/ErrorMessage';
+import { ERROR_MESSAGES } from '../types/ErrorMessage';
+import type { ErrorMessageType } from '../types/ErrorMessage';
 
 type Props = {
   isSubmitting: boolean;
   inputRef: React.RefObject<HTMLInputElement>;
-  onAdd: (title: string) => Promise<void>;
-  onError: (error: ErrorMessage | null) => void;
+  onAdd: (title: string) => Promise<boolean>;
+  onError: (error: ErrorMessageType | null) => void;
 };
 
 export const NewTodo: React.FC<Props> = ({
@@ -23,16 +24,15 @@ export const NewTodo: React.FC<Props> = ({
 
     if (!trimmedTitle) {
       setTitle('');
-      onError(ErrorMessage.TITLE);
+      onError(ERROR_MESSAGES.TITLE);
 
       return;
     }
 
-    try {
-      await onAdd(trimmedTitle);
+    const added = await onAdd(trimmedTitle);
+
+    if (added) {
       setTitle('');
-    } catch {
-      // keep the entered text on error
     }
   };
 

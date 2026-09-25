@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import cn from 'classnames';
 import { NewTodo } from './NewTodo';
-import { ErrorMessage } from '../types/ErrorMessage';
+import type { ErrorMessageType } from '../types/ErrorMessage';
 import { Todo } from '../types/Todo';
 
 type Props = {
   isAllCompleted: boolean;
   isSubmitting: boolean;
   todos: Todo[];
-  onAdd: (title: string) => Promise<void>;
-  onError: (error: ErrorMessage | null) => void;
+  onAdd: (title: string) => Promise<boolean>;
+  onError: (error: ErrorMessageType | null) => void;
   onToggleAll: () => void;
 };
 

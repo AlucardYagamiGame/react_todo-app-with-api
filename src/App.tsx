@@ -10,8 +10,10 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
-import { FilterType } from './types/FilterType';
-import { ErrorMessage } from './types/ErrorMessage';
+import { FILTERS } from './types/FilterType';
+import { ERROR_MESSAGES } from './types/ErrorMessage';
+import type { ErrorMessageType } from './types/ErrorMessage';
+import type { FilterType } from './types/FilterType';
 import type { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 
@@ -22,8 +24,10 @@ export const App: React.FC = () => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingTodoIds, setLoadingTodoIds] = useState<number[]>([]);
-  const [filter, setFilter] = useState<FilterType>(FilterType.all);
-  const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
+  const [filter, setFilter] = useState<FilterType>(FILTERS.all);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessageType | null>(
+    null,
+  );
   const isAllCompleted = todos.every(todo => todo.completed);
 
   useEffect(() => {
@@ -33,7 +37,7 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage(ErrorMessage.LOAD));
+      .catch(() => setErrorMessage(ERROR_MESSAGES.LOAD));
   }, []);
 
   useEffect(() => {
@@ -48,7 +52,7 @@ export const App: React.FC = () => {
     return () => clearTimeout(timerId);
   }, [errorMessage]);
 
-  const handleAddTodo = async (title: string) => {
+  const handleAddTodo = async (title: string): Promise<boolean> => {
     setIsSubmitting(true);
     setErrorMessage(null);
     setTempTodo({ id: 0, title, completed: false, userId: USER_ID });
@@ -61,10 +65,12 @@ export const App: React.FC = () => {
       });
 
       setTodos(currentTodos => [...currentTodos, newTodo]);
-    } catch {
-      setErrorMessage(ErrorMessage.ADD);
 
-      throw new Error('Unable to add a todo');
+      return true;
+    } catch {
+      setErrorMessage(ERROR_MESSAGES.ADD);
+
+      return false;
     } finally {
       setIsSubmitting(false);
       setTempTodo(null);
@@ -81,7 +87,7 @@ export const App: React.FC = () => {
 
       return true;
     } catch {
-      setErrorMessage(ErrorMessage.DELETE);
+      setErrorMessage(ERROR_MESSAGES.DELETE);
 
       return false;
     } finally {
@@ -104,7 +110,7 @@ export const App: React.FC = () => {
 
       return true;
     } catch {
-      setErrorMessage(ErrorMessage.UPDATE);
+      setErrorMessage(ERROR_MESSAGES.UPDATE);
 
       return false;
     } finally {
@@ -143,7 +149,7 @@ export const App: React.FC = () => {
     );
 
     if (hasError) {
-      setErrorMessage(ErrorMessage.DELETE);
+      setErrorMessage(ERROR_MESSAGES.DELETE);
     }
 
     setTodos(currentTodos =>
@@ -155,11 +161,11 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = todos.filter(todo => {
-    if (filter === FilterType.active) {
+    if (filter === FILTERS.active) {
       return !todo.completed;
     }
 
-    if (filter === FilterType.completed) {
+    if (filter === FILTERS.completed) {
       return todo.completed;
     }
 
