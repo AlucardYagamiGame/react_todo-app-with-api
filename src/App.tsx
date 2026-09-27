@@ -73,6 +73,7 @@ export const App: React.FC = () => {
   };
 
   const handleDeleteTodo = async (todoId: number) => {
+    setErrorMessage(null);
     setLoadingTodoIds(currentIds => [...currentIds, todoId]);
 
     try {
@@ -94,6 +95,7 @@ export const App: React.FC = () => {
     todoId: number,
     data: Partial<Todo>,
   ): Promise<boolean> => {
+    setErrorMessage(null);
     setLoadingTodoIds(currentIds => [...currentIds, todoId]);
 
     try {
@@ -137,6 +139,7 @@ export const App: React.FC = () => {
     const completedTodos = todos.filter(todo => todo.completed);
     const completedIds = completedTodos.map(todo => todo.id);
 
+    setErrorMessage(null);
     setLoadingTodoIds(currentIds => [...currentIds, ...completedIds]);
 
     const deletedIds: number[] = [];
