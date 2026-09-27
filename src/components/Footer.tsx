@@ -11,28 +11,6 @@ type Props = {
   onClearCompleted: () => void;
 };
 
-type FilterLink = {
-  value: FilterType;
-  href: string;
-  label: string;
-  dataCy: string;
-};
-
-function getFilterHref(value: FilterType): string {
-  return value === FILTERS.all ? '#/' : `#/${value}`;
-}
-
-function getFilterLabel(value: FilterType): string {
-  return value[0].toUpperCase() + value.slice(1);
-}
-
-const FILTER_LINKS: FilterLink[] = Object.values(FILTERS).map(value => ({
-  value,
-  href: getFilterHref(value),
-  label: getFilterLabel(value),
-  dataCy: `FilterLink${getFilterLabel(value)}`,
-}));
-
 export const Footer: React.FC<Props> = ({
   todos,
   filter,
@@ -49,22 +27,47 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        {FILTER_LINKS.map(link => (
-          <a
-            key={link.value}
-            href={link.href}
-            className={cn('filter__link', {
-              selected: filter === link.value,
-            })}
-            data-cy={link.dataCy}
-            onClick={event => {
-              event.preventDefault();
-              onFilterChange(link.value);
-            }}
-          >
-            {link.label}
-          </a>
-        ))}
+        <a
+          href="#/"
+          className={cn('filter__link', {
+            selected: filter === FILTERS.all,
+          })}
+          data-cy="FilterLinkAll"
+          onClick={event => {
+            event.preventDefault();
+            onFilterChange(FILTERS.all);
+          }}
+        >
+          All
+        </a>
+
+        <a
+          href="#/active"
+          className={cn('filter__link', {
+            selected: filter === FILTERS.active,
+          })}
+          data-cy="FilterLinkActive"
+          onClick={event => {
+            event.preventDefault();
+            onFilterChange(FILTERS.active);
+          }}
+        >
+          Active
+        </a>
+
+        <a
+          href="#/completed"
+          className={cn('filter__link', {
+            selected: filter === FILTERS.completed,
+          })}
+          data-cy="FilterLinkCompleted"
+          onClick={event => {
+            event.preventDefault();
+            onFilterChange(FILTERS.completed);
+          }}
+        >
+          Completed
+        </a>
       </nav>
 
       <button
