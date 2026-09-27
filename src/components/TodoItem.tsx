@@ -6,6 +6,7 @@ type Props = {
   todo: Todo;
   isProcessed: boolean;
   onDelete: (todoId: number) => void;
+  onToggle: (todoId: number) => Promise<boolean>;
   onUpdate: (todoId: number, data: Partial<Todo>) => Promise<boolean>;
 };
 
@@ -13,6 +14,7 @@ export const TodoItem: React.FC<Props> = ({
   todo,
   isProcessed,
   onDelete,
+  onToggle,
   onUpdate,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -88,7 +90,7 @@ export const TodoItem: React.FC<Props> = ({
           checked={todo.completed}
           aria-label="Mark as completed"
           onChange={() => {
-            onUpdate(todo.id, { completed: !todo.completed });
+            void onToggle(todo.id);
           }}
         />
       </label>

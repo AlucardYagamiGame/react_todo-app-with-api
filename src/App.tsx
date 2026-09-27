@@ -15,7 +15,6 @@ import { ERROR_MESSAGES } from './types/ErrorMessage';
 import type { ErrorMessageType } from './types/ErrorMessage';
 import type { FilterType } from './types/FilterType';
 import type { Todo } from './types/Todo';
-import { UserWarning } from './UserWarning';
 
 const ERROR_TIMEOUT = 3000;
 
@@ -31,10 +30,6 @@ export const App: React.FC = () => {
   const isAllCompleted = todos.every(todo => todo.completed);
 
   useEffect(() => {
-    if (!USER_ID) {
-      return;
-    }
-
     getTodos()
       .then(setTodos)
       .catch(() => setErrorMessage(ERROR_MESSAGES.LOAD));
@@ -118,6 +113,16 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleToggleTodo = async (todoId: number): Promise<boolean> => {
+    const toggledTodo = todos.find(todo => todo.id === todoId);
+
+    if (!toggledTodo) {
+      return false;
+    }
+
+    return handleUpdateTodo(todoId, { completed: !toggledTodo.completed });
+  };
+
   const handleToggleAll = () => {
     const newCompletedStatus = !isAllCompleted;
 
@@ -172,10 +177,6 @@ export const App: React.FC = () => {
     return true;
   });
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -196,6 +197,7 @@ export const App: React.FC = () => {
             tempTodo={tempTodo}
             loadingTodoIds={loadingTodoIds}
             onDelete={handleDeleteTodo}
+            onToggle={handleToggleTodo}
             onUpdate={handleUpdateTodo}
           />
         )}
