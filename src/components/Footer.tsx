@@ -2,18 +2,18 @@ import React from 'react';
 import cn from 'classnames';
 import { FILTERS } from '../types/FilterType';
 import type { FilterType } from '../types/FilterType';
-import { Todo } from '../types/Todo';
+import type { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[];
-  filter: FilterType;
+  selectedFilter: FilterType;
   onFilterChange: (filter: FilterType) => void;
   onClearCompleted: () => void;
 };
 
 export const Footer: React.FC<Props> = ({
   todos,
-  filter,
+  selectedFilter,
   onFilterChange,
   onClearCompleted,
 }) => {
@@ -30,7 +30,7 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: filter === FILTERS.all,
+            selected: selectedFilter === FILTERS.all,
           })}
           data-cy="FilterLinkAll"
           onClick={event => {
@@ -44,7 +44,7 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: filter === FILTERS.active,
+            selected: selectedFilter === FILTERS.active,
           })}
           data-cy="FilterLinkActive"
           onClick={event => {
@@ -58,7 +58,7 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: filter === FILTERS.completed,
+            selected: selectedFilter === FILTERS.completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={event => {

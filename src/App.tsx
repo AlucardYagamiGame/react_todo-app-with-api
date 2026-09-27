@@ -23,7 +23,7 @@ export const App: React.FC = () => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingTodoIds, setLoadingTodoIds] = useState<number[]>([]);
-  const [filter, setFilter] = useState<FilterType>(FILTERS.all);
+  const [selectedFilter, setSelectedFilter] = useState<FilterType>(FILTERS.all);
   const [errorMessage, setErrorMessage] = useState<ErrorMessageType | null>(
     null,
   );
@@ -47,7 +47,7 @@ export const App: React.FC = () => {
     return () => clearTimeout(timerId);
   }, [errorMessage]);
 
-  const handleAddTodo = async (title: string): Promise<boolean> => {
+  const handleAddTodo = async (title: string) => {
     setIsSubmitting(true);
     setErrorMessage(null);
     setTempTodo({ id: 0, title, completed: false, userId: USER_ID });
@@ -72,7 +72,7 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleDeleteTodo = async (todoId: number): Promise<boolean> => {
+  const handleDeleteTodo = async (todoId: number) => {
     setLoadingTodoIds(currentIds => [...currentIds, todoId]);
 
     try {
@@ -113,7 +113,7 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleToggleTodo = async (todoId: number): Promise<boolean> => {
+  const handleToggleTodo = async (todoId: number) => {
     const toggledTodo = todos.find(todo => todo.id === todoId);
 
     if (!toggledTodo) {
@@ -166,11 +166,11 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = todos.filter(todo => {
-    if (filter === FILTERS.active) {
+    if (selectedFilter === FILTERS.active) {
       return !todo.completed;
     }
 
-    if (filter === FILTERS.completed) {
+    if (selectedFilter === FILTERS.completed) {
       return todo.completed;
     }
 
@@ -205,8 +205,8 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <Footer
             todos={todos}
-            filter={filter}
-            onFilterChange={setFilter}
+            selectedFilter={selectedFilter}
+            onFilterChange={setSelectedFilter}
             onClearCompleted={handleClearCompleted}
           />
         )}

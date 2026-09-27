@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import cn from 'classnames';
 import { NewTodo } from './NewTodo';
 import type { ErrorMessageType } from '../types/ErrorMessage';
-import { Todo } from '../types/Todo';
+import type { Todo } from '../types/Todo';
 
 type Props = {
   isAllCompleted: boolean;
